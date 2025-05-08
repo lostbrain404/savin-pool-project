@@ -25,12 +25,12 @@ contract  SavingPool{
         depositTimes[msg.sender] = block.timestamp;
     }
 
-    function WithdrawEth()external onlyWhenOpen{
-        uint amount =  balances[msg.sender] ;
-        require(block.timestamp>unlockTime,"Saving period not ended yet");
-        require(balances[msg.sender]>=amount,"No funds to withdraw.");
-        amount = 0;
-        payable(owner).transfer(address(this).balance);
+    function WithdrawEth() external onlyWhenOpen {
+        require(block.timestamp > unlockTime, "Saving period not ended yet");
+        uint amount = balances[msg.sender];
+        require(amount > 0, "No funds to withdraw.");
+        balances[msg.sender] = 0;
+        payable(msg.sender).transfer(amount);
     }
 
     function getBalances()external view returns(uint){
